@@ -24,7 +24,7 @@
 - mosdns设置
 
 ## 整体网络设计和架构
-![Network diagram](https://github.com/user-attachments/assets/69ce61da-24ec-4919-ab90-b4b036dc69f7)
+![Network Diagram](https://github.com/user-attachments/assets/35adae3f-1dcc-4fbd-a234-da9bd80d76cf)
 
 ### 主路由
 1. 主要功能：
@@ -35,4 +35,14 @@
 - 提供Wifi无线网络；
 - 提供默认DNS服务；
 2. 主路由的角色：  
-作为基础上网路由器，在没有旁路由的情况下也不影响日常的上网，可以通过更改DHCP设置来控制局域网内的设备是直接走主路由上网还是走旁路由上网。
+作为基础上网路由器，在没有旁路由的情况下也不影响日常的上网，可以通过更改DHCP设置来控制局域网内的设备是直接走主路由上网还是走旁路由上网。  
+主路由连接Internet，重点是：**需要ISP提供公网IP地址**，后面会用到DDNS来绑定域名。 如果没有公网IP地址，可以打客服电话让ISP开通公网IP，一般都可以。 
+3. 关于DDNS，域名和证书:  
+IPSEC IKEV2通过手机端连接到家里的网络会需要证书验证，所以会用到免费域名。（当然你也可以用付费的域名，本文不讨论付费域名。）  
+虽然有很多免费的域名可以选择申请使用，但我们要选择在国内没有被限制访问的，不翻墙能正常打开网页的。  
+有了公网地址，有了域名，最后就需要SSL证书。
+我们使用ACME来自动获得免费的Let's Encrypt的证书，由于国内屏蔽了80端口，所以只能用DNS Chanllenge的方式来验证你的域名的所有权。  
+选择的DDNS必须是可以提供API来帮助第三方来验证你的域名。  
+支持DNS Chanllenge的DDNS可以从下面链接里查看选择。  
+https://community.letsencrypt.org/t/dns-providers-who-easily-integrate-with-lets-encrypt-dns-validation/86438
+4. 为何需要公网IP地址？
